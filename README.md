@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AutoJD ⚡
 
-## Getting Started
+Tired of sending the same generic job application email to every company? AutoJD helps you write personalized emails in seconds.
 
-First, run the development server:
+## The Problem 🎯
+
+Job hunting means writing dozens of application emails. Most people either:
+- Send the same boring template to everyone
+- Spend 15+ minutes crafting each email manually
+- Miss important keywords from the job posting
+
+This wastes time and hurts your chances of getting noticed.
+
+## The Solution ✨
+
+AutoJD reads your resume and the job description, then writes a short, relevant email that actually matches what they're looking for.
+
+Takes 30 seconds instead of 15 minutes.
+
+## How It Works 🚀
+
+1. Paste your resume or LinkedIn profile
+2. Paste the job posting
+3. Pick your tone (professional, casual, confident)
+4. Get your personalized email
+5. Copy and send
+
+No account needed. Your data stays private.
+
+## Tech Stack 🛠️
+
+- **Frontend**: Next.js, React, TypeScript
+- **Styling**: Tailwind CSS
+- **AI**: OpenAI GPT API
+- **Hosting**: Vercel
+- **Privacy**: No database - everything happens in your browser
+
+## Running Locally 💻
+
+```bash
+git clone https://github.com/YOUR_USERNAME/autojd.git
+```
+
+```bash
+cd autojd
+```
+
+```bash
+npm install
+```
+ Add your OpenAI API key
+```bash
+OPENAI_API_KEY=your_key_here
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features ✅
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Resume and job description input
+- Multiple writing tones
+- Email length control (200-300 characters)
+- One-click copy
+- Privacy-first design
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Roadmap 📋
 
-## Learn More
+- LinkedIn referral messages
+- Chrome extension
+- Job match scoring
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing 🤝
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open source project. Pull requests welcome.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License 📄
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
