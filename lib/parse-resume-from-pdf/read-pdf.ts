@@ -1,11 +1,8 @@
-"use client"
-import * as pdfjs from "pdfjs-dist";
-
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
+  "pdfjs-dist/legacy/build/pdf.worker.mjs",
+  import.meta.url,
 ).toString();
-
 /**
  * Step 1: Read pdf and output textItems by concatenating results from each page.
  *
