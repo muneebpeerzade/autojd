@@ -15,7 +15,13 @@ import { Upload, X } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
 import { parseResumeFromPdf } from "@/lib/parse-resume-from-pdf";
-export default function FileUploadForm() {
+import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
+
+export default function FileUploadForm({
+  onResumeSave,
+}: {
+  onResumeSave: (values: Resume | null) => void;
+}) {
   const [files, setFiles] = React.useState<File[]>([]);
 
   const onFileValidate = React.useCallback(
@@ -47,18 +53,22 @@ export default function FileUploadForm() {
       }" has been rejected`,
     });
   }, []);
-  
+
   useEffect(() => {
     const processPdf = async () => {
       if (files.length === 1) {
         try {
           const fileUrl = URL.createObjectURL(files[0]);
           const items = await parseResumeFromPdf(fileUrl);
-          console.log("read pdf", items);
-
+          if (Object.entries(items).length !== 0) {
+            onResumeSave(items);
+          }
         } catch (err) {
           toast("Failed to parse PDF");
         }
+      } else if (files.length === 0) {
+        console.log("empty");
+        onResumeSave(null);
       }
     };
     processPdf();
