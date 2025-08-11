@@ -1,11 +1,10 @@
 import React from 'react'
 import AssistantView from '@/components/Assistant/AssistantView'
-import AssistantInputBox from '@/components/Assistant/AssistantInputBox'
 const AssistantPanel = () => {
   return (
-    <div className=''>
+    <div className='border rounded p-2 space-y-2 relative'>
         <AssistantView/>
-        <AssistantInputBox/>
+        {/* <AssistantInputBox/> */}
     </div>
   )
 }

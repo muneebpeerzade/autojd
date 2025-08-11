@@ -8,15 +8,19 @@ const Navbar = () => {
     <nav className="h-16  py-10 flex items-center justify-between border-b lg:border-0 px-6 lg:px-0">
       <Link
         href={"/"}
-        className="flex items-center gap-2 hover:bg-primary/20 "
+        className="flex items-center gap-2 hover:bg-primary/20 px-2 py-1 rounded"
       >
         <DraftingCompass className="h-6 w-6  stroke-secondary" />
-        <h1 className="scroll-m-20 text-2xl  tracking-tight text-primary  font-serif   rounded ">
+        <h1 className="scroll-m-20 text-2xl  tracking-tight text-primary  font-serif ">
           autoJD
         </h1>
       </Link>
       <div className="flex items-center gap-8">
-        <Link href={"/"}>
+        <Link
+          href={"https://github.com/muneebpeerzade/autojd"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Image
             src="./github-mark-white.svg"
             width={24}
@@ -25,7 +29,11 @@ const Navbar = () => {
             priority
           />
         </Link>
-        <Link href={"https://www.linkedin.com/in/muneeb-peerzade/"} target="_blank" rel="noopener noreferrer">
+        <Link
+          href={"https://www.linkedin.com/in/muneeb-peerzade/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Image
             src={LinkedingLogo}
             width={24}

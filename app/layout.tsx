@@ -3,6 +3,7 @@ import { Geist, Lora, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
+import { ResumeProvider } from "@/context/ResumeContext";
 //sans
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,12 +38,14 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar/>
-          {children}
+          <ResumeProvider>
+            <Navbar />
+            {children}
+          </ResumeProvider>
         </ThemeProvider>
       </body>
     </html>
