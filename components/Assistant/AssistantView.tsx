@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowRight,
   BriefcaseBusiness,
+  Coffee,
   Feather,
   FileText,
   FlaskConical,
@@ -35,7 +36,7 @@ const AssistantView = () => {
           onValueChange={(val) => val && setTone(val)}
           variant={"outline"}
           size={"sm"}
-          className="gap-2  "
+          className="gap-2   "
         >
           <ToggleGroupItem value="corporate">
             <BriefcaseBusiness />
@@ -70,6 +71,12 @@ const AssistantView = () => {
           </ToggleGroupItem>
           <ToggleGroupItem value="story-telling">
             <Feather /> Storytelling
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="michael-scott"
+            className="text-destructive-foreground bg-destructive"
+          >
+            <Coffee /> Michael Scott
           </ToggleGroupItem>
         </ToggleGroup>
       </div>

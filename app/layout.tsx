@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${lora.variable} ${firaCode.variable}  antialiased max-w-[64rem]  mx-auto`}
+        className={`${geistSans.variable} ${lora.variable} ${firaCode.variable}  antialiased max-w-[70rem]  mx-auto`}
       >
         <ThemeProvider
           attribute="class"

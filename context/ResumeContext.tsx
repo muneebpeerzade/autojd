@@ -35,9 +35,7 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   };
 
   return (
-    <ResumeContext.Provider value={value}>
-      {children}
-    </ResumeContext.Provider>
+    <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>
   );
 };
 
