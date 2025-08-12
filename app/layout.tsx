@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Lora, Fira_Code } from "next/font/google";
+import { Lora, Fira_Code, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import { ResumeProvider } from "@/context/ResumeContext";
+import { Toaster } from "@/components/ui/sonner";
 //sans
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 // serif
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${lora.variable} ${firaCode.variable}  antialiased max-w-[70rem]  mx-auto`}
+        className={`${inter.variable} ${lora.variable} ${firaCode.variable}  antialiased max-w-[70rem]  mx-auto`}
       >
         <ThemeProvider
           attribute="class"
@@ -45,6 +46,7 @@ export default function RootLayout({
           <ResumeProvider>
             <Navbar />
             {children}
+            <Toaster  closeButton richColors />
           </ResumeProvider>
         </ThemeProvider>
       </body>
