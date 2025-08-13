@@ -107,7 +107,7 @@ const JobDescriptionForm = ({
         return "Write My Referral Request";
       }
       if (hasApplication && hasFollowUp && intent.length === 2) {
-        return "Write My Follow-Up";
+        return "Write My Application Follow-Up";
       }
       if (hasReferral && hasColdOutreach && intent.length === 2) {
         return "Write My Referral Outreach";
@@ -135,41 +135,37 @@ const JobDescriptionForm = ({
     tone: z.infer<typeof ToneEnumSchema>,
     intent: z.infer<typeof IntentEnumSchema>[]
   ) => {
-    // Data-backed base recommendations by tone
-    // Based on Boomerang study (40M emails) and industry research
+    // === Tone ranges based on multi-source research ===
     const toneRanges = {
-      // Corporate: Slightly more formal, but still concise for busy executives
       corporate: {
-        ideal: [75, 125],
-        max: 150,
+        ideal: [75, 100],
+        max: 125,
         reasoning:
-          "Corporate professionals prefer concise, professional communication",
+          "Corporate pros scan quickly — 75–100 words yields ~51% response rate (Boomerang, Drip).",
       },
-      // Startup: Slightly longer for storytelling and personal connection
       startup: {
-        ideal: [90, 140],
-        max: 180,
+        ideal: [100, 150],
+        max: 175,
         reasoning:
-          "Startup culture values personality and narrative alongside efficiency",
+          "Startup culture values some storytelling — 100–150 words keeps personality while staying tight.",
       },
-      // Academic: Longer for detailed context and thoroughness expected in research
       "academic-research": {
-        ideal: [120, 200],
+        ideal: [150, 200],
         max: 250,
         reasoning:
-          "Academic context requires more detailed explanations and context",
+          "Academic audiences expect detail — 150–200 words balances depth and readability.",
       },
     };
 
-    // Intent-based modifiers backed by research data
+    // === Intent modifiers based on email type research ===
     const intentModifiers = {
-      "follow-up": 0.7, // 30% shorter - referencing previous context
-      "cold-outreach": 0.8, // 20% shorter - attention scarce, mobile-first
-      referral: 1.1, // 10% longer - leveraging connection requires explanation
-      application: 1.0, // Baseline - balanced approach for job applications
+      "cold-outreach": 0.9, // Lean shorter (75–125 words sweet spot — Lemlist, Mailmeteor)
+      "follow-up": 1.15, // Slightly longer follow-ups perform well (~150 words — Belkins, Artisan)
+      referral: 1.05, // Extra context needed without bloating
+      application: 1.0, // Baseline
     };
 
-    // Calculate composite modifier for multiple intents
+    // Calculate composite modifier if multiple intents
     let modifier = 1;
     if (intent.length > 0) {
       const applicableModifiers = intent.map((i) => intentModifiers[i] || 1.0);
@@ -184,37 +180,43 @@ const JobDescriptionForm = ({
       Math.round(range.ideal[1] * modifier),
     ];
     const adjustedMax = Math.round(range.max * modifier);
-
-    // Calculate suggested length (middle of ideal range)
     const suggestedLength = Math.round(
       (adjustedIdeal[0] + adjustedIdeal[1]) / 2
     );
 
-    // Enhanced intent description
+    // Intent description for messages
     const intentDesc = intent.length > 0 ? intent.join(" + ") : "general";
 
-    // Performance indicators based on research
+    // Performance indicator messages
     const getPerformanceIndicator = (status: string) => {
       switch (status) {
         case "short":
-          return "📈 May reduce response rate by 7-15%";
+          return `📉 Emails ${(
+            ((adjustedIdeal[0] - wordCount) / adjustedIdeal[0]) *
+            100
+          ).toFixed(
+            0
+          )}% shorter than ideal may drop reply rates by ~7–15% (Boomerang study).`;
         case "long":
-          return "📉 Response rate may drop by 5-12% beyond ideal range";
+          return `📉 Going beyond the ideal by ~${(
+            ((wordCount - adjustedIdeal[1]) / adjustedIdeal[1]) *
+            100
+          ).toFixed(0)}% can reduce replies by 5–12%.`;
         case "perfect":
-          return "🎯 Optimal for 51% response rate (research-backed)";
+          return `🎯 You're in the ${adjustedIdeal[0]}–${adjustedIdeal[1]} word sweet spot for ~51% response rate.`;
         default:
           return "";
       }
     };
 
-    // Determine status with enhanced feedback
+    // Status classification
     if (wordCount < adjustedIdeal[0]) {
       const shortfallPercentage = Math.round(
         ((adjustedIdeal[0] - wordCount) / adjustedIdeal[0]) * 100
       );
       return {
         status: "short" as const,
-        message: `${shortfallPercentage}% below ideal for ${tone} ${intentDesc}: ${adjustedIdeal[0]}-${adjustedIdeal[1]} words`,
+        message: `${shortfallPercentage}% below ideal for ${tone} ${intentDesc}, aim for ${adjustedIdeal[0]}–${adjustedIdeal[1]} words.`,
         detailedMessage: getPerformanceIndicator("short"),
         color: "text-amber-600",
         suggestedLength,
@@ -227,8 +229,8 @@ const JobDescriptionForm = ({
       );
       return {
         status: "too-long" as const,
-        message: `${excessPercentage}% over maximum for ${tone} ${intentDesc}: ${adjustedIdeal[0]}-${adjustedIdeal[1]} words (max: ${adjustedMax})`,
-        detailedMessage: getPerformanceIndicator("long"),
+        message: `${excessPercentage}% over max for ${tone} ${intentDesc},keep under ${adjustedMax} words.`,
+        detailedMessage: `📉 Past ${adjustedMax} words, attention drops sharply (Drip, Lemlist).`,
         color: "text-red-600",
         suggestedLength,
         showButton: true,
@@ -237,8 +239,8 @@ const JobDescriptionForm = ({
     } else if (wordCount > adjustedIdeal[1]) {
       return {
         status: "long" as const,
-        message: `Above ideal but acceptable for ${tone} ${intentDesc}: ${adjustedIdeal[0]}-${adjustedIdeal[1]} words`,
-        detailedMessage: "📊 Still within effective range, consider tightening",
+        message: `Above ideal but within safe range for ${tone} ${intentDesc} (${adjustedIdeal[0]}–${adjustedIdeal[1]} words).`,
+        detailedMessage: getPerformanceIndicator("long"),
         color: "text-yellow-500",
         suggestedLength,
         showButton: true,
@@ -261,9 +263,9 @@ const JobDescriptionForm = ({
   const watchedTone = form.watch("tone");
   const watchedIntent = form.watch("intent");
   return (
-    <div>
+    <div className="md:pr-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="jobDescription"
@@ -477,7 +479,7 @@ const JobDescriptionForm = ({
             }}
           />
           <Button type="submit" className="w-full" size="lg">
-            <Sparkles className="mr-2 h-4 w-4" />
+            <Sparkles className=" h-4 w-4" />
             {getButtonLabel(intentValue)}
           </Button>
         </form>

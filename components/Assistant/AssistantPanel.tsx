@@ -2,7 +2,7 @@ import React from "react";
 import AssistantView from "@/components/Assistant/AssistantView";
 const AssistantPanel = () => {
   return (
-    <div className="border rounded p-2 space-y-2 relative">
+    <div className="border rounded px-2 pt-2 pb-4 space-y-2 relative">
       <AssistantView />
       {/* <AssistantInputBox/> */}
     </div>
