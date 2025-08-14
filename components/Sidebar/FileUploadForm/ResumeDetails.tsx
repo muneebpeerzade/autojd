@@ -21,13 +21,13 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
     <div className="space-y-3 text-xs">
       {/* Profile Section */}
       <section className="space-y-2">
-        <h3 className="font-semibold text-sm flex items-center gap-1">
+        <h3 className="font-semibold  flex items-center gap-1">
           <span className="h-2 w-2 bg-accent rounded-full"></span>{" "}
           <CircleUser className="w-4 h-4 stroke-accent" /> Profile
         </h3>
         <Card className="p-3">
           <div className="space-y-1 text-xs text-muted-foreground">
-            <h4 className="font-medium text-sm text-foreground">
+            <h4 className="font-medium text-foreground">
               {resume.profile.name}
             </h4>
             {resume.profile.email && (
@@ -65,7 +65,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
       {/* Work Experience Section */}
       {resume.workExperiences.length > 0 && (
         <section className="space-y-2">
-          <h3 className="font-semibold text-sm flex items-center gap-1">
+          <h3 className="font-semibold  flex items-center gap-1">
             <span className="h-2 w-2 bg-accent rounded-full"></span>{" "}
             <BriefcaseBusiness className="w-4 h-4 stroke-accent" /> Work
             Experience
@@ -73,7 +73,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
           <Card className="p-3 gap-3">
             {resume.workExperiences.map((work, idx) => (
               <div key={idx} className="space-y-1  rounded ">
-                <h3 className="font-semibold text-sm flex items-center gap-1">
+                <h3 className="font-semibold  flex items-center gap-1">
                   {work.jobTitle}
                 </h3>
                 <h4>{work.company}</h4>
@@ -104,7 +104,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
       )}
       {resume.projects.length > 0 && (
         <section className="space-y-2">
-          <h3 className="font-semibold text-sm flex items-center gap-1">
+          <h3 className="font-semibold  flex items-center gap-1">
             <span className="h-2 w-2 bg-accent rounded-full"></span>{" "}
             <Folder className="w-4 h-4 stroke-accent" />
             Projects
@@ -112,7 +112,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
           <Card className="p-3 gap-3">
             {resume.projects.map((project, idx) => (
               <div key={idx} className="space-y-1  rounded ">
-                <h3 className="font-semibold text-sm flex items-center gap-1">
+                <h3 className="font-semibold  flex items-center gap-1">
                   {project.project}
                 </h3>
                 <p className="text-muted-foreground">{project.date}</p>
@@ -143,7 +143,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
       {/* Skills Section */}
       {resume.skills.descriptions.length > 0 && (
         <section className="space-y-2">
-          <h3 className="font-semibold text-sm flex items-center gap-1">
+          <h3 className="font-semibold  flex items-center gap-1">
             <span className="w-2 h-2 bg-accent rounded-full"></span>
             <Lightbulb className="w-4 h-4 stroke-accent" />
             Skills
@@ -175,7 +175,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
 
       {resume.educations.length > 0 && (
         <section className="space-y-2">
-          <h3 className="font-semibold text-sm flex items-center gap-1">
+          <h3 className="font-semibold  flex items-center gap-1">
             <span className="h-2 w-2 bg-accent rounded-full"></span>{" "}
             <GraduationCap className="w-4 h-4 stroke-accent" />
             Education
@@ -186,7 +186,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
           <Card className="p-3 gap-1">
             {resume.educations.map((edu, idx) => (
               <div key={idx} className="space-y-1">
-                <h3 className="font-semibold text-sm flex items-center gap-1">
+                <h3 className="font-semibold  flex items-center gap-1">
                   {edu.degree}
                 </h3>
                 <p>{edu.school}</p>

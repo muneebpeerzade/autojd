@@ -62,12 +62,12 @@ const formSchema = z.object({
     .min(30, "Email should be at least 30 words for meaningful content")
     .max(300, "Keep it under 300 words for better engagement"),
 });
-
+export type JobDescriptionFormType = z.infer<typeof formSchema>;
 const JobDescriptionForm = ({
   handleFormSubmit,
   resumeDetails,
 }: {
-  handleFormSubmit: (data: FormData) => void;
+  handleFormSubmit: (data: JobDescriptionFormType) => void;
   resumeDetails: Resume | null;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,7 +80,9 @@ const JobDescriptionForm = ({
       wordCount: 100,
     },
   });
-  const intentValue = form.watch("intent");
+  const watchIntent = form.watch("intent");
+  const watchedTone = form.watch("tone");
+  const watchedIntent = form.watch("intent");
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!resumeDetails) {
       toast.error(
@@ -88,9 +90,7 @@ const JobDescriptionForm = ({
       );
       return;
     }
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    handleFormSubmit(values);
   }
   const getButtonLabel = (intent: string[]) => {
     if (intent.length === 0) {
@@ -249,7 +249,7 @@ const JobDescriptionForm = ({
     } else {
       return {
         status: "perfect" as const,
-        message: `Perfect for ${tone} ${intentDesc} email! 🎯`,
+        message: `Perfect for ${tone} ${intentDesc} email! `,
         detailedMessage: getPerformanceIndicator("perfect"),
         color: "text-emerald-500",
         suggestedLength,
@@ -259,9 +259,6 @@ const JobDescriptionForm = ({
     }
   };
 
-  // In your component, watch the other fields
-  const watchedTone = form.watch("tone");
-  const watchedIntent = form.watch("intent");
   return (
     <div className="md:pr-4">
       <Form {...form}>
@@ -418,9 +415,9 @@ const JobDescriptionForm = ({
               );
               return (
                 <FormItem>
-                  <FormLabel>What's length works best for you?</FormLabel>
+                  <FormLabel>What length works best for you?</FormLabel>
                   <FormControl>
-                    <div className="space-y-3 w-full lg:w-[32rem]">
+                    <div className="space-y-3 w-full ">
                       {/* Slider */}
                       <Slider
                         value={[field.value]}
@@ -428,9 +425,7 @@ const JobDescriptionForm = ({
                         max={300}
                         min={30}
                         step={1}
-                        className=""
                       />
-
                       {/* Info Box */}
                       <div className="border rounded-lg p-3 bg-muted/20 space-y-2 ">
                         {/* Main Status */}
@@ -480,7 +475,7 @@ const JobDescriptionForm = ({
           />
           <Button type="submit" className="w-full" size="lg">
             <Sparkles className=" h-4 w-4" />
-            {getButtonLabel(intentValue)}
+            {getButtonLabel(watchIntent)}
           </Button>
         </form>
       </Form>
