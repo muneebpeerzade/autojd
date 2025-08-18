@@ -1,44 +1,58 @@
 # AutoJD ⚡
 
-Tired of sending the same generic job application email to every company? AutoJD helps you write personalized emails in seconds.
+Stop sending generic job application emails. AutoJD helps you create personalized, high-impact emails in seconds by parsing your resume and job description. 
 
 ## The Problem 🎯
 
-Job hunting means writing dozens of application emails. Most people either:
-- Send the same boring template to everyone
-- Spend 15+ minutes crafting each email manually
-- Miss important keywords from the job posting
+Applying to jobs is painful:
+- Manually writing tailored emails takes 15+ minutes each.
+- Generic templates feel spammy and get ignored.
+- Important keywords from job postings often get missed.
 
-This wastes time and hurts your chances of getting noticed.
+This slows you down and reduces your chances of getting noticed.
 
 ## The Solution ✨
 
-AutoJD reads your resume and the job description, then writes a short, relevant email that actually matches what they're looking for.
+AutoJD does the heavy lifting for you:
+- Reads your resume + job posting.
+- Understands context and keywords.
+- Generates a short, tailored email that feels human.
+- Takes 30 seconds instead of 15 minutes.
 
-Takes 30 seconds instead of 15 minutes.
+## Features ✅
+- Resume parsing → Drop your resume, and AutoJD extracts details automatically.
+- Job description analysis → Matches your skills to role requirements
+- Smart email generator → Choose tone, style, and purpose (intro, application, follow-up, referral, cold outreach).
+- Email length control → Adjust word count with a slider (shows sweet spot for response rates).
+- Multiple writing styles → Direct & concise, warm & friendly, storytelling — even “Michael Scott” mode.
+- Result history → Toggle between previous results without losing work.
+- Autosizing text area → Cleaner editing and preview experience.
+- One-click copy → Send your email instantly.
+- Privacy-first → No database, no account required — all processing happens client-side.
 
 ## How It Works 🚀
 
-1. Paste your resume or LinkedIn profile
-2. Paste the job posting
-3. Pick your tone (professional, casual, confident)
-4. Get your personalized email
-5. Copy and send
+1. Upload your resume (PDF)
+2. Paste the job description
+3. Pick tone + writing style
+4. Select email type (intro, application, referral, etc.)
+5. Adjust word count if needed
+6. Get your personalized email instantly
 
 No account needed. Your data stays private.
 
 ## Tech Stack 🛠️
 
 - **Frontend**: Next.js, React, TypeScript
-- **Styling**: Tailwind CSS
-- **AI**: OpenAI GPT API
+- **Styling**: Tailwind CSS + shadcn/ui
+- **AI**: DeepSeek API
 - **Hosting**: Vercel
-- **Privacy**: No database - everything happens in your browser
+- Privacy: No backend storage everything happens in the browser
 
 ## Running Locally 💻
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/autojd.git
+git clone https://github.com/muneebpeerzade/autojd.git
 ```
 
 ```bash
@@ -50,20 +64,12 @@ npm install
 ```
  Add your OpenAI API key
 ```bash
-OPENAI_API_KEY=your_key_here
+DEEPSEEK_API_KEY=your_key_here
 ```
 
 ```bash
 npm run dev
 ```
-
-## Features ✅
-
-- Resume and job description input
-- Multiple writing tones
-- Email length control (200-300 characters)
-- One-click copy
-- Privacy-first design
 
 ## Roadmap 📋
 
