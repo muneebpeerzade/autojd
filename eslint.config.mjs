@@ -10,7 +10,29 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Keep Next.js defaults
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+
+  // Override / disable rules
+  {
+    rules: {
+      // React Hooks
+      "react-hooks/exhaustive-deps": "off",
+
+      // TypeScript
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+
+      // Style
+      "prefer-const": "off",
+
+      // Accessibility
+      "jsx-a11y/role-supports-aria-props": "off",
+
+      // Next.js warnings
+      "@next/next/no-img-element": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

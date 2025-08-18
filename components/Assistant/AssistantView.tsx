@@ -15,7 +15,6 @@ import {
   ChevronRight,
   History,
 } from "lucide-react";
-import { Textarea } from "../ui/textarea";
 import { AutosizeTextarea } from "../ui/autosize-textarea";
 
 // Type for stored email responses

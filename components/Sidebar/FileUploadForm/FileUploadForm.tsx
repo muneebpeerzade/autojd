@@ -64,6 +64,7 @@ export default function FileUploadForm({
             onResumeSave(items);
           }
         } catch (err) {
+          console.log(err)
           toast("Failed to parse PDF");
         }
       } else if (files.length === 0) {

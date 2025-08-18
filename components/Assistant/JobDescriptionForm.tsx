@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -74,7 +73,7 @@ const JobDescriptionForm = ({
 }: {
   handleFormSubmit: (data: JobDescriptionFormType) => void;
   resumeDetails: Resume | null;
-  emailGenerated: Boolean;
+  emailGenerated: boolean;
   openResult: () => void;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -306,7 +305,7 @@ const JobDescriptionForm = ({
             name="style"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What's your writing style ?</FormLabel>
+                <FormLabel>What&apos;s your writing style ?</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     type="single"
@@ -350,7 +349,7 @@ const JobDescriptionForm = ({
             name="intent"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What's this email for ?</FormLabel>
+                <FormLabel>What&apos;s this email for ?</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     type="multiple"
