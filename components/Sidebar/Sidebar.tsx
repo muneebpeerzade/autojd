@@ -12,7 +12,7 @@ const Sidebar = () => {
   const { resumeDetails, saveResumeDetails } = useResume();
   const [showMichael, setShowMichael] = useState(true);
   return (
-    <div className="border rounded p-2 space-y-4 overflow-y-scroll">
+    <div className="border bg-background z-10 rounded p-2 space-y-4 overflow-y-scroll">
       <FileUploadForm onResumeSave={saveResumeDetails} />
       {resumeDetails ? (
         <ResumeDetails resume={resumeDetails} />

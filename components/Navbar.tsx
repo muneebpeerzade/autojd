@@ -8,9 +8,9 @@ const Navbar = () => {
     <nav className="h-16  py-10 flex items-center justify-between border-b lg:border-0 px-6 lg:px-0">
       <Link
         href={"/"}
-        className="flex items-center gap-2 hover:bg-primary/20 px-2 py-1 rounded"
+        className="flex items-center gap-2 hover:bg-primary/20 px-2 py-1 rounded group transition-colors duration-150"
       >
-        <DraftingCompass className="h-6 w-6  stroke-secondary" />
+        <DraftingCompass className="h-6 w-6  stroke-secondary group-hover:stroke-primary" />
         <h1 className="scroll-m-20 text-2xl  tracking-tight text-primary  font-serif ">
           autoJD
         </h1>

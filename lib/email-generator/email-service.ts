@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { JobDescriptionFormType } from "@/components/Assistant/JobDescriptionForm";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
-import { createEmailPrompt } from "@/lib/email-generator/email-generator";
+import { createEmailPrompt } from "@/lib/email-generator/prompt-generator";
 
 function createDeepSeekClient() {
   return new OpenAI({

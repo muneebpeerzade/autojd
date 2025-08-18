@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,7 +30,9 @@ import {
   SatelliteDish,
   Smile,
   Sparkles,
+  SquareChevronRight,
 } from "lucide-react";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { toast } from "sonner";
 
 const ToneEnumSchema = z.enum(["corporate", "startup", "academic-research"]);
@@ -68,9 +69,13 @@ export type JobDescriptionFormType = z.infer<typeof formSchema>;
 const JobDescriptionForm = ({
   handleFormSubmit,
   resumeDetails,
+  emailGenerated,
+  openResult,
 }: {
   handleFormSubmit: (data: JobDescriptionFormType) => void;
   resumeDetails: Resume | null;
+  emailGenerated: Boolean;
+  openResult: () => void;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +87,6 @@ const JobDescriptionForm = ({
       wordCount: 100,
     },
   });
-  const watchIntent = form.watch("intent");
   const watchedTone = form.watch("tone");
   const watchedIntent = form.watch("intent");
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -94,44 +98,6 @@ const JobDescriptionForm = ({
     }
     handleFormSubmit(values);
   }
-
-  const getButtonLabel = (intent: string[]) => {
-    if (intent.length === 0) {
-      return "Write My Email";
-    }
-
-    if (intent.length > 1) {
-      const hasApplication = intent.includes("application");
-      const hasFollowUp = intent.includes("follow-up");
-      const hasReferral = intent.includes("referral");
-      const hasColdOutreach = intent.includes("cold-outreach");
-
-      if (hasApplication && hasReferral && intent.length === 2) {
-        return "Write My Referral Request";
-      }
-      if (hasApplication && hasFollowUp && intent.length === 2) {
-        return "Write My Application Follow-Up";
-      }
-      if (hasReferral && hasColdOutreach && intent.length === 2) {
-        return "Write My Referral Outreach";
-      }
-      if (hasFollowUp && hasColdOutreach && intent.length === 2) {
-        return "Write My Follow-Up Message";
-      }
-      return "Write My Email";
-    }
-
-    if (intent.includes("follow-up")) {
-      return "Write My Follow-Up";
-    }
-    if (intent.includes("referral")) {
-      return "Write My Referral Email";
-    }
-    if (intent.includes("cold-outreach")) {
-      return "Write My Outreach Email";
-    }
-    return "Write My Application Email";
-  };
 
   const getSmartWordCountInfo = (
     wordCount: number,
@@ -270,15 +236,29 @@ const JobDescriptionForm = ({
             name="jobDescription"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-serif text-2xl font-medium">
+                <FormLabel className="font-serif text-2xl font-medium flex justify-between">
                   Job Description
+                  {emailGenerated ? (
+                    <Button
+                      variant={"outline"}
+                      className="font-sans"
+                      type="button"
+                      onClick={openResult}
+                    >
+                      <SquareChevronRight /> back to result
+                    </Button>
+                  ) : null}
                 </FormLabel>
                 <FormControl>
-                  <Textarea
+                  <div className="px-1">
+                  <AutosizeTextarea
+                  className=""
                     placeholder="Paste the job description to generate your personalized application email ✨"
-                    rows={26}
+                    minHeight={340}
+                    maxHeight={600}
                     {...field}
                   />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -479,9 +459,9 @@ const JobDescriptionForm = ({
               );
             }}
           />
-          <Button type="submit" className="w-full" size="lg">
-            <Sparkles className=" h-4 w-4" />
-            {getButtonLabel(watchIntent)}
+          <Button type="submit" className="w-full " size="lg">
+            <Sparkles className="h-4 w-4 " />
+            Create Personalized Email
           </Button>
         </form>
       </Form>
