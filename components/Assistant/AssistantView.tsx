@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import JobDescriptionForm, {
   JobDescriptionFormType,
-} from "./JobDescriptionForm";
+} from "@/components/Assistant/JobDescriptionForm";
 import { Button } from "@/components/ui/button";
 import { Copy, RotateCcw, Loader2 } from "lucide-react";
 
@@ -86,7 +86,7 @@ const AssistantView = () => {
       {/* Left half - form */}
       <div
         className={`h-full overflow-y-scroll transition-all duration-300 ${
-          showResponse ? "w-1/2" : "w-full"
+          showResponse ? "w-0" : "w-full"
         }`}
       >
         <JobDescriptionForm
@@ -97,7 +97,7 @@ const AssistantView = () => {
 
       {/* Right half - response */}
       {showResponse && (
-        <div className="w-1/2 h-full border text-accent-foreground p-4 overflow-y-scroll rounded-md">
+        <div className="w-full h-full text-accent-foreground p-4 overflow-y-scroll rounded-md">
           <div className="flex flex-wrap gap-2 justify-between items-center mb-4">
             <p className="font-serif text-2xl font-medium">
               Your personalized email
@@ -136,9 +136,9 @@ const AssistantView = () => {
 
           {/* Error state */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-              <p className="text-red-800 font-medium">Error</p>
-              <p className="text-red-600 text-sm">{error}</p>
+            <div className="bg-destructive border-destructive rounded-lg p-4 mb-4">
+              <p className="text-destructive-foreground font-medium">Error</p>
+              <p className="text-destructive-foreground text-sm">{error}</p>
               <Button
                 onClick={handleRetry}
                 variant="outline"

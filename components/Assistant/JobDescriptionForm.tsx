@@ -28,6 +28,7 @@ import {
   MessageSquare,
   Repeat,
   Rocket,
+  SatelliteDish,
   Smile,
   Sparkles,
 } from "lucide-react";
@@ -46,6 +47,7 @@ const IntentEnumSchema = z.enum([
   "follow-up",
   "referral",
   "cold-outreach",
+  "introduction",
 ]);
 const formSchema = z.object({
   jobDescription: z
@@ -74,9 +76,9 @@ const JobDescriptionForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       jobDescription: "",
-      tone: "corporate",
+      tone: "startup",
       style: "direct-and-concise",
-      intent: ["application"],
+      intent: ["application", "introduction"],
       wordCount: 100,
     },
   });
@@ -92,6 +94,7 @@ const JobDescriptionForm = ({
     }
     handleFormSubmit(values);
   }
+
   const getButtonLabel = (intent: string[]) => {
     if (intent.length === 0) {
       return "Write My Email";
@@ -163,15 +166,14 @@ const JobDescriptionForm = ({
       "follow-up": 1.15, // Slightly longer follow-ups perform well (~150 words — Belkins, Artisan)
       referral: 1.05, // Extra context needed without bloating
       application: 1.0, // Baseline
+      introduction: 0.7,
     };
 
-    // Calculate composite modifier if multiple intents
+    // Calculate composite modifier using arithmetic mean (more predictable)
     let modifier = 1;
     if (intent.length > 0) {
-      const applicableModifiers = intent.map((i) => intentModifiers[i] || 1.0);
-      modifier =
-        applicableModifiers.reduce((acc, curr) => acc * curr, 1) /
-        applicableModifiers.length;
+      const mods = intent.map((i) => intentModifiers[i] ?? 1.0);
+      modifier = mods.reduce((a, b) => a + b, 0) / mods.length; // arithmetic mean
     }
 
     const range = toneRanges[tone] || toneRanges.corporate;
@@ -382,6 +384,10 @@ const JobDescriptionForm = ({
                       }
                     }}
                   >
+                    <ToggleGroupItem value="introduction">
+                      <MessageSquare className="stroke-muted-foreground" />
+                      Introduction
+                    </ToggleGroupItem>
                     <ToggleGroupItem value="application">
                       <FileText className="stroke-muted-foreground" />
                       Application
@@ -395,7 +401,7 @@ const JobDescriptionForm = ({
                       Referral
                     </ToggleGroupItem>
                     <ToggleGroupItem value="cold-outreach">
-                      <MessageSquare className="stroke-muted-foreground" />
+                      <SatelliteDish className="stroke-muted-foreground" />
                       Cold Outreach
                     </ToggleGroupItem>
                   </ToggleGroup>
