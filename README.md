@@ -1,6 +1,6 @@
-# AutoJD⚡-Personalized Job Emails Instantly
+# AutoJD⚡- Personalized Job Emails Instantly
+![2025-08-19_07-05-41_kmpfqk](https://github.com/user-attachments/assets/5ab50056-cc75-4d1b-9b7a-3265db6f3cd8)
 
-![demo](https://res.cloudinary.com/duseu6urj/image/upload/v1755570045/2025-08-19_07-05-41_kmpfqk_pz0jrp.gif)
 Stop sending generic job application emails. AutoJD helps you create personalized, high-impact emails in seconds by parsing your resume and job description. 
 ## The Problem 🎯
 
