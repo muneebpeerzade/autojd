@@ -7,15 +7,24 @@ import { useResume } from "@/context/ResumeContext";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Eye, EyeClosed } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const { resumeDetails, saveResumeDetails } = useResume();
   const [showMichael, setShowMichael] = useState(true);
   return (
-    <div className="border bg-background z-10 rounded p-2 space-y-4 overflow-y-scroll">
+    <div
+      className={cn(
+        "border bg-background rounded p-2  flex flex-col gap-4 ",
+        resumeDetails && "overflow-y-scroll"
+      )}
+    >
+      <div className="flex-1">
       <FileUploadForm onResumeSave={saveResumeDetails} />
+      </div>
       {resumeDetails ? (
-        <ResumeDetails resume={resumeDetails} />
+          <ResumeDetails resume={resumeDetails} />
+
       ) : (
         <div className="mx-auto w-full flex flex-col gap-2">
           {showMichael ? (

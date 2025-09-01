@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { JobDescriptionFormType } from "@/components/Assistant/JobDescriptionForm";
+import { EmailParametersFormType } from "@/components/Assistant/EmailParametersForm";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
 import { createEmailPrompt } from "@/lib/email-generator/prompt-generator";
 
@@ -12,7 +12,7 @@ function createDeepSeekClient() {
 
 export async function generateEmailStream(
   resumeDetails: Resume,
-  jobDescriptionDetails: JobDescriptionFormType,
+  jobDescriptionDetails: EmailParametersFormType,
 ) {
   const openai = createDeepSeekClient();
   const prompt = createEmailPrompt(resumeDetails, jobDescriptionDetails);
@@ -40,7 +40,7 @@ export async function generateEmailStream(
 
 export async function generateEmailNonStreaming(
   resumeDetails: Resume,
-  jobDescriptionDetails: JobDescriptionFormType,
+  jobDescriptionDetails: EmailParametersFormType,
 ) {
   const openai = createDeepSeekClient();
   const prompt = createEmailPrompt(resumeDetails, jobDescriptionDetails);

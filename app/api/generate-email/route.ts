@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { JobDescriptionFormType } from "@/components/Assistant/JobDescriptionForm";
+import { EmailParametersFormType } from "@/components/Assistant/EmailParametersForm";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
 import { generateEmailStream } from "@/lib/email-generator/email-service";
 
@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     // Parse the request body
     const { resumeDetails, jobDescriptionDetails }: {
       resumeDetails: Resume;
-      jobDescriptionDetails: JobDescriptionFormType;
+      jobDescriptionDetails: EmailParametersFormType;
     } = await request.json();
 
     // Validate required fields

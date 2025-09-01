@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { Toaster } from "@/components/ui/sonner";
+import SplitButton from "@/components/SplitButton";
 //sans
 const inter = Inter({
   variable: "--font-inter",
@@ -39,14 +40,14 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
           <ResumeProvider>
             <Navbar />
             {children}
-            <Toaster  closeButton richColors />
+            <Toaster closeButton richColors />
           </ResumeProvider>
         </ThemeProvider>
       </body>
