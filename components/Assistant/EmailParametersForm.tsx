@@ -28,11 +28,10 @@ import {
   Rocket,
   SatelliteDish,
   Smile,
-  Sparkles,
-  SquareChevronRight,
 } from "lucide-react";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { toast } from "sonner";
+import SplitButton from "@/components/SplitButton";
 
 const ToneEnumSchema = z.enum(["corporate", "startup", "academic-research"]);
 const StyleEnumSchema = z.enum([
@@ -49,6 +48,12 @@ const IntentEnumSchema = z.enum([
   "cold-outreach",
   "introduction",
 ]);
+const platformEnumSchema = z.enum([
+  "email",
+  "y-combinator",
+  "wellfound",
+  "linkedin",
+]);
 const formSchema = z.object({
   jobDescription: z
     .string()
@@ -63,18 +68,15 @@ const formSchema = z.object({
     .number()
     .min(30, "Email should be at least 30 words for meaningful content")
     .max(300, "Keep it under 300 words for better engagement"),
+  platform: platformEnumSchema,
 });
-export type JobDescriptionFormType = z.infer<typeof formSchema>;
-const JobDescriptionForm = ({
+export type EmailParametersFormType = z.infer<typeof formSchema>;
+const EmailParametersForm = ({
   handleFormSubmit,
   resumeDetails,
-  emailGenerated,
-  openResult,
 }: {
-  handleFormSubmit: (data: JobDescriptionFormType) => void;
+  handleFormSubmit: (data: EmailParametersFormType) => void;
   resumeDetails: Resume | null;
-  emailGenerated: boolean;
-  openResult: () => void;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,11 +86,13 @@ const JobDescriptionForm = ({
       style: "direct-and-concise",
       intent: ["application", "introduction"],
       wordCount: 100,
+      platform: "email",
     },
   });
   const watchedTone = form.watch("tone");
   const watchedIntent = form.watch("intent");
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // console.log(values);
     if (!resumeDetails) {
       toast.error(
         "Almost ready! Please upload your resume so we can personalize your email"
@@ -227,9 +231,9 @@ const JobDescriptionForm = ({
   };
 
   return (
-    <div className="md:pr-4">
+    <div className="">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="jobDescription"
@@ -237,26 +241,16 @@ const JobDescriptionForm = ({
               <FormItem>
                 <FormLabel className="font-serif text-2xl font-medium flex justify-between">
                   Job Description
-                  {emailGenerated ? (
-                    <Button
-                      variant={"outline"}
-                      className="font-sans"
-                      type="button"
-                      onClick={openResult}
-                    >
-                      <SquareChevronRight /> back to result
-                    </Button>
-                  ) : null}
                 </FormLabel>
                 <FormControl>
                   <div className="px-1">
-                  <AutosizeTextarea
-                  className=""
-                    placeholder="Paste the job description to generate your personalized application email ✨"
-                    minHeight={340}
-                    maxHeight={600}
-                    {...field}
-                  />
+                    <AutosizeTextarea
+                      className="resize-none"
+                      placeholder="Paste the job description to generate your personalized application email ✨"
+                      minHeight={340}
+                      maxHeight={340}
+                      {...field}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -268,7 +262,7 @@ const JobDescriptionForm = ({
             name="tone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>How should you sound ?</FormLabel>
+                <FormLabel>Who&apos;s the email for?</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     type="single"
@@ -349,7 +343,7 @@ const JobDescriptionForm = ({
             name="intent"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>What&apos;s this email for ?</FormLabel>
+                <FormLabel>What&apos;s this for ?</FormLabel>
                 <FormControl>
                   <ToggleGroup
                     type="multiple"
@@ -458,14 +452,27 @@ const JobDescriptionForm = ({
               );
             }}
           />
-          <Button type="submit" className="w-full " size="lg">
+          {/* <Button type="submit" className="w-full " size="lg">
             <Sparkles className="h-4 w-4 " />
             Create Personalized Email
-          </Button>
+          </Button> */}
+          <FormField
+            control={form.control}
+            name="platform"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <SplitButton form={form} fieldName="platform" />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {/* <SplitButton /> */}
         </form>
       </Form>
     </div>
   );
 };
 
-export default JobDescriptionForm;
+export default EmailParametersForm;

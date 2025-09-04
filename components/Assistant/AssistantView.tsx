@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useResume } from "@/context/ResumeContext";
 import JobDescriptionForm, {
-  JobDescriptionFormType,
-} from "@/components/Assistant/JobDescriptionForm";
+  EmailParametersFormType,
+} from "@/components/Assistant/EmailParametersForm";
 import { Button } from "@/components/ui/button";
 import {
   Copy,
@@ -14,336 +14,147 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
+  SquareChevronRight,
+  CopyCheck,
 } from "lucide-react";
-import { AutosizeTextarea } from "../ui/autosize-textarea";
-
-// Type for stored email responses
-interface EmailResponse {
-  id: string;
-  email: string;
-  formData: JobDescriptionFormType;
-  timestamp: Date;
-}
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 
 const AssistantView = () => {
   const { resumeDetails } = useResume();
-  const [showResponse, setShowResponse] = useState(false);
-  const [generatedEmail, setGeneratedEmail] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  // History management state
-  const [emailHistory, setEmailHistory] = useState<EmailResponse[]>([]);
-  const [currentHistoryIndex, setCurrentHistoryIndex] = useState(-1);
-
+  const [showResult, setShowResult] = useState(false);
+  const [emailGenerating, setEmailGenerating] = useState<boolean>(false);
+  const [emailGenerated, setEmailGenerated] = useState<string | null>(null);
+  const [emailCopied, setEmailCopied] = useState<boolean>(false);
   // Store last form data for retry functionality
   const [lastFormData, setLastFormData] =
-    useState<JobDescriptionFormType | null>(null);
+    useState<EmailParametersFormType | null>(null);
 
-  const handleFormSubmit = async (data: JobDescriptionFormType) => {
+  const handleFormSubmit = async (data: EmailParametersFormType) => {
     if (!resumeDetails) return;
-
-    // Store the form data for retry functionality
+    setEmailGenerating(true);
+    // console.log("Data", resumeDetails, data);
+    setEmailGenerated("");
+    setShowResult(true);
     setLastFormData(data);
+    const payload = {
+      candidate: resumeDetails,
+      emailParameters: data,
+    };
+    const res = await fetch("api/gpe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
 
-    if (!showResponse) {
-      setShowResponse(true);
+    while (true) {
+      const { done, value } = await reader?.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      setEmailGenerated((prev) => prev + chunk);
     }
-    setIsGenerating(true);
-    setGeneratedEmail("");
-    setError(null);
-
-    try {
-      const response = await fetch("/api/generate-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          resumeDetails,
-          jobDescriptionDetails: data,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate email");
-      }
-
-      // Handle streaming response
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (reader) {
-        let fullEmail = "";
-        while (true) {
-          const { done, value } = await reader.read();
-
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          fullEmail += chunk;
-          setGeneratedEmail(fullEmail);
-        }
-
-        // After email is fully generated, add it to history
-        if (fullEmail) {
-          const newEmailResponse: EmailResponse = {
-            id: Date.now().toString(),
-            email: fullEmail,
-            formData: data,
-            timestamp: new Date(),
-          };
-
-          setEmailHistory((prev) => [...prev, newEmailResponse]);
-          setCurrentHistoryIndex(emailHistory.length); // Set to the new latest index
-        }
-      }
-    } catch (error) {
-      console.error("Error generating email:", error);
-      setError(error instanceof Error ? error.message : "Something went wrong");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedEmail);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("Failed to copy email:", error);
-    }
+    setEmailGenerating(false);
   };
 
   const handleRetry = () => {
-    // Rerun the form submission with the last form data instead of going back to form
     if (lastFormData) {
       handleFormSubmit(lastFormData);
     }
   };
-
-  const openResult = () => {
-    setShowResponse(true);
-  };
-
-  // History navigation functions
-  const goToPreviousEmail = () => {
-    if (currentHistoryIndex > 0) {
-      const newIndex = currentHistoryIndex - 1;
-      setCurrentHistoryIndex(newIndex);
-      setGeneratedEmail(emailHistory[newIndex].email);
+  const handleCopy = async () => {
+    if (!emailGenerated) return;
+    try {
+      setEmailCopied(true);
+      await navigator.clipboard.writeText(emailGenerated);
+      setTimeout(() => {
+        setEmailCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy", error);
     }
   };
-
-  const goToNextEmail = () => {
-    if (currentHistoryIndex < emailHistory.length - 1) {
-      const newIndex = currentHistoryIndex + 1;
-      setCurrentHistoryIndex(newIndex);
-      setGeneratedEmail(emailHistory[newIndex].email);
-    }
-  };
-
-  const clearHistory = () => {
-    setGeneratedEmail("");
-    setShowResponse(false);
-    setEmailHistory([]);
-    setCurrentHistoryIndex(-1);
-  };
-
-  // Handle textarea changes
-  const handleEmailChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setGeneratedEmail(e.target.value);
-  };
-
-  // Get current email info for display
-  const getCurrentEmailInfo = () => {
-    if (currentHistoryIndex >= 0 && emailHistory[currentHistoryIndex]) {
-      const current = emailHistory[currentHistoryIndex];
-      return {
-        position: currentHistoryIndex + 1,
-        total: emailHistory.length,
-        timestamp: current.timestamp,
-        formData: current.formData,
-      };
-    }
-    return null;
-  };
-
-  const currentEmailInfo = getCurrentEmailInfo();
 
   return (
-    <div className="flex h-full overflow-hidden">
-      {/* Left half - form */}
-      <div
-        className={`h-full overflow-y-scroll transition-all duration-300 ${
-          showResponse ? "w-0" : "w-full"
-        }`}
+    <div className="relative overflow-x-hidden  border rounded overflow-y-auto">
+      {/* Toggle Button */}
+      <Button
+        className="absolute z-20 right-5 top-4 group shadow-lg"
+        size={"sm"}
+        variant={"secondary"}
+        disabled={emailGenerating}
+        onClick={() => setShowResult((prev) => !prev)}
       >
-        <JobDescriptionForm
-          handleFormSubmit={handleFormSubmit}
-          resumeDetails={resumeDetails}
-          emailGenerated={!isGenerating && generatedEmail.length !== 0}
-          openResult={openResult}
-        />
-      </div>
+        {showResult ? <ChevronLeft /> : <ChevronRight />}
+      </Button>
 
-      {/* Right half - response */}
-      {showResponse && (
-        <div className="w-full h-full text-accent-foreground p-4 overflow-y-scroll rounded-md">
-          <div className="space-y-2 mb-4">
-            <div className="flex items-center justify-between">
-              <p className="font-serif text-2xl font-medium">
-                Your personalized email
-              </p>
+      {/* Container for sliding panels */}
+      <div className="relative">
+        {/* Form Panel - Always rendered but slides out of view */}
+        <div
+          className={`p-4 transition-transform duration-300 ease-in-out ${
+            showResult
+              ? "-translate-x-full opacity-50"
+              : "translate-x-0 opacity-100"
+          }`}
+        >
+          <JobDescriptionForm
+            handleFormSubmit={handleFormSubmit}
+            resumeDetails={resumeDetails}
+          />
+        </div>
 
-              {/* History info and controls */}
-              {emailHistory.length > 0 && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <History className="w-4 h-4" />
-                  <span>
-                    {currentEmailInfo?.position || 0} of {emailHistory.length}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* History navigation */}
-            {emailHistory.length > 1 && (
-              <div className="flex items-center justify-between p-2 bg-muted rounded-lg">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={goToPreviousEmail}
-                  disabled={currentHistoryIndex <= 0 || isGenerating}
-                  className="flex items-center gap-1"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Previous
-                </Button>
-
-                <div className="text-center">
-                  {currentEmailInfo && (
-                    <div className="text-xs text-muted-foreground">
-                      <p>
-                        Generated:{" "}
-                        {currentEmailInfo.timestamp.toLocaleTimeString()}
-                      </p>
-                      <p className="capitalize">
-                        {currentEmailInfo.formData.tone} •{" "}
-                        {currentEmailInfo.formData.style}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={goToNextEmail}
-                  disabled={
-                    currentHistoryIndex >= emailHistory.length - 1 ||
-                    isGenerating
-                  }
-                  className="flex items-center gap-1"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Loading state */}
-          {isGenerating && (
-            <div className="flex items-center gap-2 text-muted-foreground mb-4">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Crafting your personalized email...</span>
-            </div>
-          )}
-
-          {/* Error state */}
-          {error && (
-            <div className="bg-destructive border-destructive rounded-lg p-4 mb-4">
-              <p className="text-destructive-foreground font-medium">Error</p>
-              <p className="text-destructive-foreground text-sm">{error}</p>
+        {/* Results Panel - Slides in from the right */}
+        <div
+          className={`absolute top-0 left-0 w-full p-4 transition-all duration-300 ease-in-out ${
+            showResult
+              ? "translate-x-0 opacity-100 pointer-events-auto"
+              : "translate-x-full opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl font-medium pb-2">
+              Your Personalized Result
+            </h2>
+            <AutosizeTextarea
+              value={emailGenerated || ""}
+              maxHeight={500}
+              disabled={emailGenerating || emailGenerated === null}
+              onChange={(e) => setEmailGenerated(e.target.value)}
+              placeholder="Your Generated email will display here for review and editing."
+              className="resize-none"
+            />
+            <div className="flex items-center justify-end gap-3">
               <Button
+                variant={"outline"}
+                size={"lg"}
                 onClick={handleRetry}
-                variant="default"
-                size="sm"
-                className="mt-2"
+                disabled={emailGenerating || emailGenerated === null}
               >
-                Try Again
+                <RotateCcw className="stroke-muted-foreground" />
+                retry
+              </Button>
+              <Button
+                size={"lg"}
+                disabled={emailGenerating || emailGenerated === null}
+                onClick={handleCopy}
+              >
+                {emailCopied ? (
+                  <>
+                    <CopyCheck className="stroke-primary-foreground/50"/>
+                    copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="stroke-primary-foreground/50" />
+                    copy
+                  </>
+                )}
               </Button>
             </div>
-          )}
-
-          {/* Email content - now as textarea */}
-          {(generatedEmail || isGenerating) && (
-            <AutosizeTextarea
-              value={generatedEmail}
-              onChange={handleEmailChange}
-              disabled={isGenerating}
-              className="w-full bg-secondary text-secondary-foreground  rounded-lg p-4 font-mono text-sm leading-relaxed min-h-[36rem] "
-              placeholder={
-                isGenerating
-                  ? "Crafting your personalized email..."
-                  : "Your email will appear here"
-              }
-            />
-          )}
-
-          {!isGenerating && generatedEmail && (
-            <div className="flex justify-between mt-4">
-              <div className="flex gap-2">
-                <Button
-                  variant={"outline"}
-                  onClick={() => setShowResponse(false)}
-                >
-                  <SquareChevronLeft className="w-4 h-4" />
-                  Back to form
-                </Button>
-
-                {/* Clear history button */}
-                {emailHistory.length > 1 && (
-                  <Button
-                    onClick={clearHistory}
-                    variant="ghost"
-                    size="sm"
-                    className="text-muted-foreground hover:text-destructive"
-                  >
-                    Clear History
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleCopyEmail}
-                  variant="default"
-                  size="sm"
-                  className="flex items-center gap-2"
-                >
-                  <Copy className="w-4 h-4" />
-                  {copied ? "Copied!" : "Copy"}
-                </Button>
-                <Button
-                  onClick={handleRetry}
-                  variant="secondary"
-                  size="sm"
-                  className="flex items-center gap-2"
-                  disabled={!lastFormData}
-                >
-                  <RotateCcw className="w-4 h-4" />
-                  Retry
-                </Button>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

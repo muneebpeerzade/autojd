@@ -16,6 +16,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { parseResumeFromPdf } from "@/lib/parse-resume-from-pdf";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
+import { cn } from "@/lib/utils";
 
 export default function FileUploadForm({
   onResumeSave,
@@ -68,7 +69,7 @@ export default function FileUploadForm({
           toast("Failed to parse PDF");
         }
       } else if (files.length === 0) {
-        console.log("empty");
+        // console.log("empty");
         onResumeSave(null);
       }
     };
@@ -82,13 +83,13 @@ export default function FileUploadForm({
       onFileReject={onFileReject}
       accept="application/pdf"
       maxFiles={1}
-      className="w-full max-w-md"
+      className={cn("w-full max-w-md h-full border-2 rounded ", files.length > 0 ? 'border-none': 'border-dashed')}
     >
       {files.length === 0 && (
-        <FileUploadDropzone>
+        <FileUploadDropzone className="border-none h-full">
           <div className="flex flex-col items-center gap-1">
             <div className="flex items-center justify-center rounded-full border p-2.5">
-              <Upload className="size-6 text-muted-foreground" />
+              <Upload className="size-6 text-muted-foreground " />
             </div>
             <p className="font-medium text-sm">Drop Your Resume here</p>
             <p className="text-muted-foreground text-xs">Or click to browse</p>

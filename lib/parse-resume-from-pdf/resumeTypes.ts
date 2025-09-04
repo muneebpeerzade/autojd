@@ -48,7 +48,7 @@ export interface Resume {
   educations: ResumeEducation[];
   projects: ResumeProject[];
   skills: {
-    descriptions: string[]
+    descriptions: string[];
   };
   custom: ResumeCustom;
 }

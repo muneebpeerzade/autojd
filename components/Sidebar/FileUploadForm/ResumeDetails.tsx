@@ -18,7 +18,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
   };
 
   return (
-    <div className="space-y-3 text-xs">
+    <div className="space-y-3 text-xs ">
       {/* Profile Section */}
       <section className="space-y-2">
         <h3 className="font-semibold  flex items-center gap-1">
@@ -26,7 +26,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
           <CircleUser className="w-4 h-4 stroke-accent" /> Profile
         </h3>
         <Card className="p-3">
-          <div className="space-y-1 text-xs text-muted-foreground">
+          <div className="space-y-1  text-muted-foreground">
             <h4 className="font-medium text-foreground">
               {resume.profile.name}
             </h4>
@@ -56,7 +56,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
             )}
           </div>
           {resume.profile.summary && (
-            <p className="text-xs text-muted-foreground line-clamp-3 mt-2">
+            <p className=" text-muted-foreground line-clamp-3 mt-2">
               {resume.profile.summary}
             </p>
           )}
@@ -89,7 +89,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <ul className="list-decimal space-y-0.5 list-inside text-xs text-muted-foreground">
+                      <ul className="list-decimal space-y-0.5 list-inside  text-muted-foreground">
                         {work.descriptions.map((description, idx) => (
                           <li key={idx}>{description}</li>
                         ))}
@@ -121,13 +121,13 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
                     <AccordionTrigger className="p-0">
                       <span className="">
                         view all points
-                        <span className="text-xs text-muted-foreground ml-1">
+                        <span className=" text-muted-foreground ml-1">
                           ({project.descriptions.length})
                         </span>
                       </span>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <ul className="list-decimal space-y-0.5 list-inside text-xs text-muted-foreground">
+                      <ul className="list-decimal space-y-0.5 list-inside  text-muted-foreground">
                         {project.descriptions.map((description, idx) => (
                           <li key={idx}>{description}</li>
                         ))}
@@ -179,7 +179,7 @@ const ResumeDetails = ({ resume }: { resume: Resume }) => {
             <span className="h-2 w-2 bg-accent rounded-full"></span>{" "}
             <GraduationCap className="w-4 h-4 stroke-accent" />
             Education
-            <span className="text-xs text-muted-foreground">
+            <span className=" text-muted-foreground">
               ({resume.educations.length})
             </span>
           </h3>

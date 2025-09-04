@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
 
+
 // Define the context type
 interface ResumeContextType {
   resumeDetails: Resume | null;
@@ -21,6 +22,7 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   const [resumeDetails, setResumeDetails] = useState<Resume | null>(null);
 
   const saveResumeDetails = (values: Resume | null) => {
+    // console.log(values)
     setResumeDetails(values);
     if (!values) {
       console.warn("No resume data provided");

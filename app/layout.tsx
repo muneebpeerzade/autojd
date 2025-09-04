@@ -39,14 +39,14 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
           <ResumeProvider>
             <Navbar />
             {children}
-            <Toaster  closeButton richColors />
+            <Toaster closeButton richColors />
           </ResumeProvider>
         </ThemeProvider>
       </body>
