@@ -1,5 +1,5 @@
 import { BULLET_POINTS } from "@/lib/parse-resume-from-pdf/extract-resume-from-sections/lib/bullet-points";
-import { isBold, hasNumber } from "@/lib/parse-resume-from-pdf/extract-resume-from-sections/lib/common-features";
+import { isBold } from "@/lib/parse-resume-from-pdf/extract-resume-from-sections/lib/common-features";
 import type { Lines, Line, Subsections, TextItem } from "@/lib/parse-resume-from-pdf/types";
 
 // Add the same JOB_TITLES array from your extractWorkExperience function

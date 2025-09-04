@@ -28,8 +28,6 @@ import {
   Rocket,
   SatelliteDish,
   Smile,
-  Sparkles,
-  SquareChevronRight,
 } from "lucide-react";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { toast } from "sonner";
@@ -76,13 +74,9 @@ export type EmailParametersFormType = z.infer<typeof formSchema>;
 const EmailParametersForm = ({
   handleFormSubmit,
   resumeDetails,
-  emailGenerated,
-  openResult,
 }: {
   handleFormSubmit: (data: EmailParametersFormType) => void;
   resumeDetails: Resume | null;
-  emailGenerated: boolean;
-  openResult: () => void;
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

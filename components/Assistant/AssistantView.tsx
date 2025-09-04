@@ -74,9 +74,6 @@ const AssistantView = () => {
       console.error("Failed to copy", error);
     }
   };
-  const openResult = () => {
-    setShowResult(true);
-  };
 
   return (
     <div className="relative overflow-x-hidden  border rounded overflow-y-auto">
@@ -104,8 +101,6 @@ const AssistantView = () => {
           <JobDescriptionForm
             handleFormSubmit={handleFormSubmit}
             resumeDetails={resumeDetails}
-            emailGenerated={true}
-            openResult={openResult}
           />
         </div>
 

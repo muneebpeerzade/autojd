@@ -5,8 +5,8 @@ import FileUploadForm from "./FileUploadForm/FileUploadForm";
 import ResumeDetails from "@/components/Sidebar/FileUploadForm/ResumeDetails";
 import { useResume } from "@/context/ResumeContext";
 import Image from "next/image";
-import { Button } from "../ui/button";
-import { Eye, EyeClosed, SquareChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Eye, EyeClosed,  } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Sidebar = () => {

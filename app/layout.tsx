@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { Toaster } from "@/components/ui/sonner";
-import SplitButton from "@/components/SplitButton";
 //sans
 const inter = Inter({
   variable: "--font-inter",
