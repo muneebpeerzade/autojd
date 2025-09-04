@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { EmailParametersFormType } from "@/components/Assistant/EmailParametersForm";
 import { Resume } from "@/lib/parse-resume-from-pdf/resumeTypes";
 import { createDeepSeekClient } from "@/lib/services/deepseek";
+import generatePrompts from "@/lib/email-generator/generatePrompts";
 
 export async function POST(request: NextRequest) {
     const { candidate, emailParameters }: {
@@ -15,35 +16,22 @@ export async function POST(request: NextRequest) {
             { status: 400, headers: { "Content-Type": "application/json" } },
         );
     }
-    // console.log("Resume Details: ", candidate);
-    // console.log("emailParameters: ", emailParameters);
+    const {systemPrompt, userPrompt} = generatePrompts(candidate, emailParameters)
     const deeepseek = createDeepSeekClient();
     const stream = await deeepseek.chat.completions.create({
         messages: [{
             role: "system",
             content:
-                "You are an expert email writer for candidates that write personalized email to the companies based on the candidates detail",
+                systemPrompt
         }, {
             role: "user",
             content:
-                `Write a professional email for candidate ${candidate.profile.name} applying for ${emailParameters.jobDescription}`,
+                userPrompt
         }],
         model: "deepseek-chat",
         stream: true,
         temperature: 1,
     });
-    // for await (const chunk of stream) {
-    //     const content = chunk?.choices?.[0]?.delta?.content;
-    //     if (content) {
-    //         console.log(content); // logs as chunks arrive
-    //     }
-
-    //     // If model signals end-of-stream, break
-    //     if (chunk.choices?.[0]?.finish_reason) {
-    //         console.log("Stream finished:", chunk.choices[0].finish_reason);
-    //         break;
-    //     }
-    // }
     const readableStream = new ReadableStream({
         async start(controller) {
             try {

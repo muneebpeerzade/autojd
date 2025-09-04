@@ -251,7 +251,7 @@ const EmailParametersForm = ({
                 <FormControl>
                   <div className="px-1">
                     <AutosizeTextarea
-                      className=""
+                      className="resize-none"
                       placeholder="Paste the job description to generate your personalized application email ✨"
                       minHeight={340}
                       maxHeight={340}
