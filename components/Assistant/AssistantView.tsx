@@ -20,8 +20,8 @@ import {
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 const AssistantView = () => {
   const { resumeDetails } = useResume();
-  const [showResult, setShowResult] = useState(true);
-  const [emailGenerating, setEmailGenerating] = useState<boolean>(true);
+  const [showResult, setShowResult] = useState(false);
+  const [emailGenerating, setEmailGenerating] = useState<boolean>(false);
   const [emailGenerated, setEmailGenerated] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState<boolean>(false);
   // Store last form data for retry functionality
