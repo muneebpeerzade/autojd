@@ -18,11 +18,10 @@ import {
   CopyCheck,
 } from "lucide-react";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
-
 const AssistantView = () => {
   const { resumeDetails } = useResume();
-  const [showResult, setShowResult] = useState(false);
-  const [emailGenerating, setEmailGenerating] = useState<boolean>(false);
+  const [showResult, setShowResult] = useState(true);
+  const [emailGenerating, setEmailGenerating] = useState<boolean>(true);
   const [emailGenerated, setEmailGenerated] = useState<string | null>(null);
   const [emailCopied, setEmailCopied] = useState<boolean>(false);
   // Store last form data for retry functionality
@@ -113,7 +112,10 @@ const AssistantView = () => {
           }`}
         >
           <div className="space-y-3">
-            <h2 className="font-serif text-2xl font-medium pb-2">
+            <h2 className="text-2xl font-medium font-serif">
+              {emailGenerating ? (
+                <Loader2 className="inline-block h-5 w-5 stroke-muted-foreground animate-spin mr-1" />
+              ) : null}
               Your Personalized Result
             </h2>
             <AutosizeTextarea
@@ -141,7 +143,7 @@ const AssistantView = () => {
               >
                 {emailCopied ? (
                   <>
-                    <CopyCheck className="stroke-primary-foreground/50"/>
+                    <CopyCheck className="stroke-primary-foreground/50" />
                     copied
                   </>
                 ) : (
